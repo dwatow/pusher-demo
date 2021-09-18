@@ -20,7 +20,6 @@
 
 <script>
 import Pusher from 'pusher-js';
-// import Echo from 'laravel-echo';
 import backendAPI from '@/utility/API';
 
 export default {
@@ -51,8 +50,13 @@ export default {
 
     this.pusher.subscribe('private-new-message')
       .bind('App\\Events\\PrivateMessage', (e) => {
+        console.log(e);
         this.private_channel = e.message;
       });
+  },
+  destroyed() {
+    this.pusher.unsubscribe('new-message');
+    this.pusher.unsubscribe('private-new-message');
   },
   data() {
     return {
@@ -65,12 +69,14 @@ export default {
   methods: {
     sendPublicMessage() {
       const { message } = this;
+      // pusher 的設定以參考它的 response
       backendAPI.GET('/public-channel', {
         message,
       });
     },
     sendPrivateMessage() {
       const { message } = this;
+      // pusher 的設定以參考它的 response
       backendAPI.GET('/private-channel', {
         message,
       });
