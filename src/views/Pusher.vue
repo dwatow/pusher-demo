@@ -44,13 +44,13 @@ export default {
   },
   mounted() {
     this.pusher.subscribe('new-message')
-      .bind('NewMessage', (e) => {
+      .bind('App\\Events\\NewMessage', (e) => {
         console.log(e);
         this.public_channel = e.message;
       });
 
     this.pusher.subscribe('private-new-message')
-      .bind('PrivateMessage', (e) => {
+      .bind('App\\Events\\PrivateMessage', (e) => {
         this.private_channel = e.message;
       });
   },
